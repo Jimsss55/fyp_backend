@@ -30,11 +30,11 @@ module Auth
       end
     end
 
-    def logout
-      cookies.delete(:access_token)
-      cookies.delete(:refresh_token)
-      render json: { message: "Logged out successfully" }, status: :ok
-    end
+    # def logout
+    #   cookies.delete(:access_token)
+    #   cookies.delete(:refresh_token)
+    #   render json: { message: "Logged out successfully" }, status: :ok
+    # end
 
     private
     def user_params

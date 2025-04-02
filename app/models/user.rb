@@ -1,4 +1,12 @@
 class User < ApplicationRecord
+  has_many :feedbacks, dependent: :destroy
+
+  has_many :user_achievements, dependent: :destroy
+  has_many :achievements, through: :user_achievements
+
+  has_many :purchased_avatars, dependent: :destroy
+  has_many :avatar_borders, through: :purchased_avatars
+
   has_secure_password
   validates :username, presence: true, uniqueness: true
   # validate :dob_cannot_be_in_future

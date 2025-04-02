@@ -10,9 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_24_053358) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_31_151226) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "achievements", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "avatar_borders", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "cost", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "message", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
+  end
+
+  create_table "purchased_avatars", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "avatar_border_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_purchased_avatars_on_user_id"
+  end
+
+  create_table "user_achievements", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "achievement_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_achievements_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
@@ -22,5 +61,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_053358) do
     t.integer "role_id", default: 1, null: false
     t.date "dob"
     t.integer "gender", default: 0, null: false
+    t.integer "starCount", default: 0
   end
+
+  add_foreign_key "feedbacks", "users"
+  add_foreign_key "purchased_avatars", "users"
+  add_foreign_key "user_achievements", "users"
 end

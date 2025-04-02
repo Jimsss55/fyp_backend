@@ -13,7 +13,6 @@ module Authenticable
 
     return render json: { error: "Missing token" }, status: :unauthorized if header.nil?
     token = header.split(" ").last if header
-    # binding.pry
     begin
       decoded = JWT.decode(token, Rails.application.credentials.secret_key_base)
       @current_user = User.find(decoded[0]["user_id"])

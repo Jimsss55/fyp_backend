@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::User::UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
@@ -34,7 +34,12 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy!
+    if @user.destroy!
+      users = User.where(role_id: 1)
+      render json: users, status: :ok
+    else
+      render json: { error: "Unable to delete user" }, status: :unprocessable_entity
+    end
   end
 
   private

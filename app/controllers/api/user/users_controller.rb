@@ -32,7 +32,6 @@ class Api::User::UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
   def destroy
     if @user.destroy!
       users = User.where(role_id: 1)

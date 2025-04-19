@@ -7,9 +7,13 @@ class User < ApplicationRecord
   has_many :purchased_avatars, dependent: :destroy
   has_many :avatar_borders, through: :purchased_avatars
 
+  has_many :progresses, dependent: :destroy
+
   has_secure_password
   validates :username, presence: true, uniqueness: true
-  # validate :dob_cannot_be_in_future
+  validates :dob, presence: true
+  validates :gender, presence: true
+
   enum :gender, {
     Male: 0,
     Female: 1
@@ -20,11 +24,5 @@ class User < ApplicationRecord
 
   def admin?
     role_id == ADMIN_ROLE_ID
-  end
-
-  def dob_cannot_be_in_future
-    if dob.present? && dob > Date.today
-      errors.add(:dob, "Can't be in future")
-    end
   end
 end

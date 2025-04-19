@@ -54,7 +54,8 @@ module  Api
 
       private
       def user_params
-        params.require(:user).permit(:username, :password, :gender, :dob)
+        # binding.pry
+        params.permit(:username, :password, :gender, :dob)
       end
       def jwt_encode(payload)
         JWT.encode(payload, Rails.application.credentials.secret_key_base)

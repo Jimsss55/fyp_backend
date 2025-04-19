@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_31_151226) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_19_034015) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_31_151226) do
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "criteria"
+    t.boolean "is_Earned", default: false
   end
 
   create_table "avatar_borders", force: :cascade do |t|
@@ -35,6 +37,32 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_31_151226) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
+  end
+
+  create_table "guided_categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "guided_tracings", force: :cascade do |t|
+    t.bigint "guided_category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["guided_category_id"], name: "index_guided_tracings_on_guided_category_id"
+  end
+
+  create_table "progresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "progressable_type", null: false
+    t.bigint "progressable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "completed", default: false
+    t.index ["progressable_type", "progressable_id"], name: "index_progresses_on_progressable"
+    t.index ["user_id", "progressable_id", "progressable_type"], name: "idx_on_user_id_progressable_id_progressable_type_49342dba97", unique: true
+    t.index ["user_id"], name: "index_progresses_on_user_id"
   end
 
   create_table "purchased_avatars", force: :cascade do |t|
@@ -65,6 +93,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_31_151226) do
   end
 
   add_foreign_key "feedbacks", "users"
+  add_foreign_key "guided_tracings", "guided_categories"
+  add_foreign_key "progresses", "users"
   add_foreign_key "purchased_avatars", "users"
   add_foreign_key "user_achievements", "users"
 end

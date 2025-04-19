@@ -31,23 +31,23 @@ class Api::Feedback::FeedbacksController < ApplicationController
     end
   end
 
-  # def authenticate_user
-  #   token = request.headers["Authorization"]&.split(" ")&.last
-  #   if token
-  #     begin
-  #       decoded_token = JWT.decode(token, Rails.application.credentials.secret_key_base, true, algorithm: "HS256")
-  #       @current_user = ::User.find_by(id: decoded_token[0]["user_id"])
-  #
-  #       unless @current_user
-  #         render json: { error: "Unauthorized: User not found" }, status: :unauthorized
-  #       end
-  #     rescue JWT::DecodeError
-  #       render json: { error: "Unauthorized: Token not found" }, status: :unauthorized
-  #     end
-  #   else
-  #     render json: { error: "Unauthorized: No token provided" }, status: :unauthorized
-  #   end
-  # end
+  def authenticate_user
+    token = request.headers["Authorization"]&.split(" ")&.last
+    if token
+      begin
+        decoded_token = JWT.decode(token, Rails.application.credentials.secret_key_base, true, algorithm: "HS256")
+        @current_user = ::User.find_by(id: decoded_token[0]["user_id"])
+
+        unless @current_user
+          render json: { error: "Unauthorized: User not found" }, status: :unauthorized
+        end
+      rescue JWT::DecodeError
+        render json: { error: "Unauthorized: Token not found" }, status: :unauthorized
+      end
+    else
+      render json: { error: "Unauthorized: No token provided" }, status: :unauthorized
+    end
+  end
 
   private
   def feedback_params

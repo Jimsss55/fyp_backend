@@ -49,7 +49,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-gem "jwt", "~> 2.7"
+gem "jwt", "~> 3.1"
 gem "pry"
 gem "rswag"
 gem "rspec-rails"
